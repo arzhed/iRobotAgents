@@ -52,10 +52,14 @@ public class RobotAgent extends Agent {
 						"        (agent.tell \":5780\" \"(iRobot-env.new \\\"goal0\\\" \\\"Rectangle2D\\\" goalCtrX 25            (floor (/ width 3)) 50 :paint T :corporeal NIL :color #x8888FF)\")\n" +
 						"        (agent.tell \":5780\" \"(iRobot-env.new \\\"goal1\\\" \\\"Rectangle2D\\\" goalCtrX (- height 25) (floor (/ width 3)) 50 :paint T :corporeal NIL :color #xFFFF88)\")\n" +
 						"  \n" +
+						"        (sleep-ignoring-interrupts 2)\n" +
 						"        (agent.tell \":5780\" \"(iRobot-env.puck :name \\\"puck\\\")\")\n" +
+						"        (sleep-ignoring-interrupts 2)\n" +
 						"        (agent.tell \":5780\" \"(iRobot-env.set \\\"puck\\\" :labeled NIL)\")\n" +
+						"        (sleep-ignoring-interrupts 2)\n" +
 						"        (agent.tell \":5780\" \"(iRobot-env.circle \\\"puck\\\" :color-name \\\"red\\\")\")\n" +
 						"  \n" +
+						"        (sleep-ignoring-interrupts 10)\n" +
 						"        (agent.new-agent \"iRobotCreate.simulator.CameraSimulation\" \"camera\" 8995  :LAC 9000 :process \"CURRENT\" :trace trace-code :traceTags trace-tags :scale (/ 1280.0 width))\n" +
 						"  \n" +
 						"        (sleep-ignoring-interrupts 2)\n" +
