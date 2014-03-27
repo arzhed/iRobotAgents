@@ -37,10 +37,10 @@ public class ScoreGoal extends StateBasedController {
 	private String myColor = "yellow";
 	private String ballColor = "red";
 	
-	Position blueGoal = new Position(639,700);
-	Position yellowGoal = new Position(639,0);
-	boolean bGoal = false;
-	Position posGoal = yellowGoal;
+	Position topGoal = new Position(639,700);
+	Position bottomGoal = new Position(639,0);
+	boolean tGoal = false;
+	Position posGoal = bottomGoal;
 	
 	float scaleFactor = 1;
 	
@@ -161,7 +161,6 @@ public class ScoreGoal extends StateBasedController {
 		
 		return degrees;
 	}
-	
 	RelativeBaring getRelativeBarring() {
 		Position posTri = askCamera("triangle", myColor);
 		Position posBall= askCamera("circle"  , ballColor);
@@ -330,12 +329,10 @@ public class ScoreGoal extends StateBasedController {
 						xDistance = xDistanceFinder();
 						Position posTri = askCamera("triangle", myColor);
 						turnAngle = posTri.a - getAngle(xDistance, posTri.y, posTri.x, posTri.y);
-						if (xDistance - posTri.x >0)
-							turnAngle = -turnAngle;
 						if (turnAngle>180) turnAngle -= 360;
 					    else if (turnAngle<-180) turnAngle += 360;
 						xDistance = Math.abs(xDistance - posTri.x);
-						
+						turnAngle = -turnAngle;
 						System.out.println("Distance to go: " + xDistance);
 						System.out.println("Angle to turn: " + turnAngle);
 						tellRobot("(iRobot.LED 255 255)");
@@ -425,7 +422,7 @@ public class ScoreGoal extends StateBasedController {
 						System.out.println(getURL().getFile()+" enter state idle thread started.");
 						Position posBall= askCamera("circle"  , ballColor);
 						Position posTri = askCamera("triangle", myColor);
-						if (bGoal) {
+						if (tGoal) {
 							if (posTri.y < posBall.y  - (int)iRobotCommands.chassisRadius) {
 								setState(wrongSideState);
 								System.out.println("WRONG SIDE");
