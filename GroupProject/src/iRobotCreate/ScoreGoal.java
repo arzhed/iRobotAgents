@@ -209,7 +209,7 @@ public class ScoreGoal extends StateBasedController {
 		double a=.0,b=.0;
 		
 		a = (double)(posGoal.x - posBall.x) / (posGoal.y - posBall.y);
-		b = (double)(650 - 639 * a);
+		b = (double)(posGoal.y - posGoal.x * a);
 		
 		x = (int)((posTri.y - b)/a);	
 		
@@ -330,10 +330,11 @@ public class ScoreGoal extends StateBasedController {
 						xDistance = xDistanceFinder();
 						Position posTri = askCamera("triangle", myColor);
 						turnAngle = posTri.a - getAngle(xDistance, posTri.y, posTri.x, posTri.y);
-						if (xDistance - posTri.x >0)
-							turnAngle = -turnAngle;
 						if (turnAngle>180) turnAngle -= 360;
 					    else if (turnAngle<-180) turnAngle += 360;
+                        if (xDistance - posTri.x < 0)
+                            turnAngle = -turnAngle;
+                        System.out.println("ANGGLLLLEEEEE :" + turnAngle);
 						xDistance = Math.abs(xDistance - posTri.x);
 						
 						System.out.println("Distance to go: " + xDistance);
@@ -438,13 +439,18 @@ public class ScoreGoal extends StateBasedController {
 							System.out.println("y robot : " + posTri.y);
 							System.out.println("x ball : " + posBall.x);
 							System.out.println("y ball : " + posBall.y);
-							System.out.println("y all : " + (posBall.y  - (int)iRobotCommands.chassisRadius - 100));
+							System.out.println("y all : " + (posBall.y  - (int)iRobotCommands.chassisRadius));
+                            System.out.println("a robot : " + posTri.a);
+
 							if (posTri.y > posBall.y  - (int)iRobotCommands.chassisRadius ) {
+                                System.out.println("WRONG SIDE");
+                                System.out.println("getAngle" +getAngle(posTri.x, posBall.y  - (int)iRobotCommands.chassisRadius, posTri.x, posTri.y));
 								setState(wrongSideState);
-								System.out.println("WRONG SIDE");
 							}else {
+                                System.out.println("GOOD SIDE");
+                                System.out.println("xdistance " + xDistanceFinder());
+                                System.out.println("getAngle "+getAngle(xDistanceFinder(), posTri.y, posTri.x, posTri.y));
 								setState(goodSideState);
-								System.out.println("GOOD SIDE");
 							}
 						}
 					}
