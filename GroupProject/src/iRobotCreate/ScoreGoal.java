@@ -37,8 +37,8 @@ public class ScoreGoal extends StateBasedController {
 	private String myColor = "yellow";
 	private String ballColor = "red";
 	
-	Position topGoal = new Position(639,700);
-	Position bottomGoal = new Position(639,0);
+	Position topGoal = new Position(639,0);
+	Position bottomGoal = new Position(639,700);
 	boolean tGoal = false;
 	Position posGoal = bottomGoal;
 	
