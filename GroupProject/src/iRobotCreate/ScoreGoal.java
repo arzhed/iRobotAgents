@@ -325,17 +325,24 @@ public class ScoreGoal extends StateBasedController {
 				@Override
 				public void run() {
 					try {
-						System.out.println(getURL().getFile()+" enter state goodSide thread started.");
+                        System.out.println(getURL().getFile()+" enter state goodSide thread started.");
+                        Position posTri = askCamera("triangle", myColor);
+                        Position posBall = askCamera("circle", ballColor);
 						xDistance = xDistanceFinder();
-						Position posTri = askCamera("triangle", myColor);
-						turnAngle = posTri.a - getAngle(xDistance, posTri.y, posTri.x, posTri.y);
-						if (turnAngle>180) turnAngle -= 360;
-					    else if (turnAngle<-180) turnAngle += 360;
-                        if (xDistance - posTri.x < 0)
-                            turnAngle = -turnAngle;
-                        System.out.println("ANGGLLLLEEEEE :" + turnAngle);
-						xDistance = Math.abs(xDistance - posTri.x);
-						turnAngle = -turnAngle;
+                        xDistance = Math.abs(xDistance - posTri.x);
+						if (posBall.x > posTri.x) {
+                            if(posTri.a <180)
+                                turnAngle = posTri.a;
+                            else
+                                turnAngle = posTri.a - 360;
+                        }
+                        else {
+                            if(posTri.a <180)
+                                turnAngle = 180 - posTri.a;
+                            else
+                                turnAngle = posTri.a - 180;
+                        }
+
 						System.out.println("Distance to go: " + xDistance);
 						System.out.println("Angle to turn: " + turnAngle);
 						tellRobot("(iRobot.LED 255 255)");
@@ -358,7 +365,7 @@ public class ScoreGoal extends StateBasedController {
 		public void handleEvent(Sensor sensor, final short reading) {
 			switch (sensor) {
 			case Overcurrents:
-				tellRobot("(iRobot.drive 0 :emergency T)");
+				//tellRobot("(iRobot.drive 0 :emergency T)");
 			case BumpsAndWheelDrops:
 			}
 		}
@@ -379,7 +386,7 @@ public class ScoreGoal extends StateBasedController {
 						Position posTri = askCamera("triangle", myColor);
 						Position posBall= askCamera("circle"  , ballColor);
 						
-						yDistance= posBall.y  - (int)iRobotCommands.chassisRadius;
+						yDistance= posBall.y  - (int)iRobotCommands.chassisRadius -50;
 						
 						turnAngle = posTri.a - getAngle(posTri.x, yDistance, posTri.x, posTri.y);
 						if (turnAngle>180) turnAngle -= 360;
@@ -394,6 +401,7 @@ public class ScoreGoal extends StateBasedController {
 						tellRobot("(iRobot.LED 0 255)");
 						tellRobot("(iRobot.moveby "+ yDistance +")");
 						sleepDistance(yDistance);
+                        CASAUtil.sleepIgnoringInterrupts(3000, null); // wait for things to settle
 						setState(idleState);
 					}
 					catch (Throwable e) {
@@ -408,7 +416,7 @@ public class ScoreGoal extends StateBasedController {
 		public void handleEvent(Sensor sensor, final short reading) {
 			switch (sensor) {
 			case Overcurrents:
-				tellRobot("(iRobot.drive 0 :emergency T)");
+				//tellRobot("(iRobot.drive 0 :emergency T)");
 			case BumpsAndWheelDrops:
 			}
 		}
@@ -465,7 +473,7 @@ public class ScoreGoal extends StateBasedController {
 		public void handleEvent(Sensor sensor, final short reading) {
 			switch (sensor) {
 			case Overcurrents:
-				tellRobot("(iRobot.drive 0 :emergency T)");
+				//tellRobot("(iRobot.drive 0 :emergency T)");
 			case BumpsAndWheelDrops:
 			}
 		}
