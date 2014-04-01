@@ -207,10 +207,10 @@ public class ScoreGoal extends StateBasedController {
 		int x=0;
 		double a=.0,b=.0;
 		
-		a = (double)(posGoal.x - posBall.x) / (posGoal.y - posBall.y);
-		b = (double)(posGoal.y - posGoal.x * a);
+		a = ((double)posGoal.y - (double)posBall.y) / ((double)posGoal.x - (double)posBall.x);
+		b = (double)posGoal.y - (double)posGoal.x * a;
 		
-		x = (int)((posTri.y - b)/a);	
+		x = (int)(((double)posTri.y - b)/a);	
 		
 		return x;
 	}
@@ -303,7 +303,7 @@ public class ScoreGoal extends StateBasedController {
 									int distance = (int)(Math.random()*600);
 									tellRobot("(iRobot.moveby "+distance+")");
 									sleepDistance(distance);
-									setState(ballPushState); // yes, this is setting to self-state, but that causes the state to reset and call enterState()
+									setState(idleState);
 								}
 							}
 						}
@@ -327,10 +327,8 @@ public class ScoreGoal extends StateBasedController {
 					try {
                         System.out.println(getURL().getFile()+" enter state goodSide thread started.");
                         Position posTri = askCamera("triangle", myColor);
-                        Position posBall = askCamera("circle", ballColor);
 						xDistance = xDistanceFinder();
-                        xDistance = Math.abs(xDistance - posTri.x);
-						if (posBall.x > posTri.x) {
+						if (xDistance> posTri.x) {
                             if(posTri.a <180)
                                 turnAngle = posTri.a;
                             else
@@ -338,20 +336,22 @@ public class ScoreGoal extends StateBasedController {
                         }
                         else {
                             if(posTri.a <180)
-                                turnAngle = 180 - posTri.a;
+                                turnAngle = posTri.a - 180;
                             else
                                 turnAngle = posTri.a - 180;
                         }
-
+						if (Math.abs(turnAngle)>3) {
+							System.out.println("Angle to turn: " + turnAngle);
+							tellRobot("(iRobot.rotate-deg "+ turnAngle +")");
+							sleepAngle(turnAngle);
+						}
+						xDistance = Math.abs(xDistance - posTri.x);
+						if (xDistance/2 > 100)
+							xDistance=xDistance/2;
 						System.out.println("Distance to go: " + xDistance);
-						System.out.println("Angle to turn: " + turnAngle);
-						tellRobot("(iRobot.LED 255 255)");
-						tellRobot("(iRobot.rotate-deg "+ turnAngle +")");
-						sleepAngle(turnAngle);
-						tellRobot("(iRobot.LED 0 255)");
-						tellRobot("(iRobot.moveby "+ xDistance +")");
+						tellRobot("(iRobot.moveby " + xDistance +")");
 						sleepDistance(xDistance);
-						setState(ballPushState);
+						setState(idleState);
 					}
 					catch (Throwable e) {
 						println("error", "ScoreGoal.enterState() [state=goodSide]: Unexpected error in state thread", e);
@@ -386,7 +386,10 @@ public class ScoreGoal extends StateBasedController {
 						Position posTri = askCamera("triangle", myColor);
 						Position posBall= askCamera("circle"  , ballColor);
 						
-						yDistance= posBall.y  - (int)iRobotCommands.chassisRadius -50;
+						if (tGoal)
+							yDistance= posBall.y  + (int)iRobotCommands.chassisRadius +10;
+						else
+							yDistance= posBall.y  - (int)iRobotCommands.chassisRadius -10;
 						
 						turnAngle = posTri.a - getAngle(posTri.x, yDistance, posTri.x, posTri.y);
 						if (turnAngle>180) turnAngle -= 360;
@@ -394,14 +397,13 @@ public class ScoreGoal extends StateBasedController {
 						yDistance = Math.abs(yDistance - posTri.y);
 						
 						System.out.println("Distance to go: " + yDistance);
-						System.out.println("Angle to turn: " + turnAngle);
-						tellRobot("(iRobot.LED 255 255)");
-						tellRobot("(iRobot.rotate-deg "+ turnAngle +")");
-						sleepAngle(turnAngle);
-						tellRobot("(iRobot.LED 0 255)");
+						if (Math.abs(turnAngle)>3) {
+							System.out.println("Angle to turn: " + turnAngle);
+							tellRobot("(iRobot.rotate-deg "+ turnAngle +")");
+							sleepAngle(turnAngle);
+						}
 						tellRobot("(iRobot.moveby "+ yDistance +")");
 						sleepDistance(yDistance);
-                        CASAUtil.sleepIgnoringInterrupts(3000, null); // wait for things to settle
 						setState(idleState);
 					}
 					catch (Throwable e) {
@@ -434,30 +436,34 @@ public class ScoreGoal extends StateBasedController {
 						Position posBall= askCamera("circle"  , ballColor);
 						Position posTri = askCamera("triangle", myColor);
 						if (tGoal) {
-							if (posTri.y < posBall.y  - (int)iRobotCommands.chassisRadius) {
-								setState(wrongSideState);
+							if (posTri.y < posBall.y  + (int)iRobotCommands.chassisRadius) {
 								System.out.println("WRONG SIDE");
+								setState(wrongSideState);
 							}else {
-								setState(goodSideState);
-								System.out.println("GOOD SIDE");
+								if (Math.abs(xDistanceFinder() - posTri.x) < 50) {
+									System.out.println("BALL PUSH");
+									tellRobot("(iRobot.drive 0 :emergency T :flush T)");
+									setState(ballPushState);
+								} else {
+									System.out.println("GOOD SIDE");
+									setState(goodSideState);
+								}
 							}
 						}
 						else {
-							System.out.println("y robot : " + posTri.y);
-							System.out.println("x ball : " + posBall.x);
-							System.out.println("y ball : " + posBall.y);
-							System.out.println("y all : " + (posBall.y  - (int)iRobotCommands.chassisRadius));
-                            System.out.println("a robot : " + posTri.a);
-
 							if (posTri.y > posBall.y  - (int)iRobotCommands.chassisRadius ) {
                                 System.out.println("WRONG SIDE");
-                                System.out.println("getAngle" +getAngle(posTri.x, posBall.y  - (int)iRobotCommands.chassisRadius, posTri.x, posTri.y));
-								setState(wrongSideState);
+                            	setState(wrongSideState);
 							}else {
-                                System.out.println("GOOD SIDE");
-                                System.out.println("xdistance " + xDistanceFinder());
-                                System.out.println("getAngle "+getAngle(xDistanceFinder(), posTri.y, posTri.x, posTri.y));
-								setState(goodSideState);
+								int x = xDistanceFinder();
+								if (Math.abs(x - posTri.x) < 50) {
+									System.out.println("BALL PUSH");
+									tellRobot("(iRobot.drive 0 :emergency T :flush T)");
+									setState(ballPushState);
+								} else {
+									System.out.println("GOOD SIDE");
+									setState(goodSideState);
+								}
 							}
 						}
 					}
