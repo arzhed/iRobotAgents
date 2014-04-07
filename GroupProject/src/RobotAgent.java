@@ -63,16 +63,16 @@ public class RobotAgent extends Agent {
 						"        (agent.new-agent \"iRobotCreate.simulator.CameraSimulation\" \"camera\" 8995  :LAC 9000 :process \"CURRENT\" :trace trace-code :traceTags trace-tags :scale (/ 1280.0 width))\n" +
 						"  \n" +
 						"        (sleep-ignoring-interrupts 2)\n" +
-						//"        (agent.new-agent \"iRobotCreate.iRobotCreate\" \"Alice2\" 9100  :LAC 9000 :process \"CURRENT\" :trace trace-code :traceTags trace-tags :markup \"KQML\" :outstream \"Alice.out\" :instream \"Alice.in\")\n" +
-						//"        (agent.tell \":5780\" \"(iRobot-env.triangle \\\"Alice2\\\" :name \\\"red-tri\\\" :color-name \\\"purple\\\")\")\n" +
-						"        (agent.new-agent \"iRobotCreate.iRobotCreate\" \"Bob2\"   9101  :LAC 9000 :process \"CURRENT\" :trace trace-code :traceTags trace-tags :markup \"KQML\" :outstream \"Bob.out\" :instream \"Bob.in\")\n" +
-						"        (agent.tell \":5780\" \"(iRobot-env.triangle \\\"Bob2\\\" :name \\\"green-tri\\\" :color-name \\\"green\\\")\")\n" +
+						"        (agent.new-agent \"iRobotCreate.iRobotCreate\" \"Alice2\" 9100  :LAC 9000 :process \"CURRENT\" :trace trace-code :traceTags trace-tags :markup \"KQML\" :outstream \"Alice.out\" :instream \"Alice.in\")\n" +
+						"        (agent.tell \":5780\" \"(iRobot-env.triangle \\\"Alice2\\\" :name \\\"red-tri\\\" :color-name \\\"purple\\\")\")\n" +
+						//"        (agent.new-agent \"iRobotCreate.iRobotCreate\" \"Bob2\"   9101  :LAC 9000 :process \"CURRENT\" :trace trace-code :traceTags trace-tags :markup \"KQML\" :outstream \"Bob.out\" :instream \"Bob.in\")\n" +
+						//"        (agent.tell \":5780\" \"(iRobot-env.triangle \\\"Bob2\\\" :name \\\"green-tri\\\" :color-name \\\"green\\\")\")\n" +
 						//"        (agent.new-agent \"iRobotCreate.iRobotCreate\" \"Carol2\" 9102  :LAC 9000 :process \"CURRENT\" :trace trace-code :traceTags trace-tags :markup \"KQML\" :outstream \"Carol.out\" :instream \"Carol.in\")\n" +
 						//"        (agent.tell \":5780\" \"(iRobot-env.triangle \\\"Carol2\\\" :name \\\"yellow-tri\\\" :color-name \\\"yellow\\\")\")\n" +
 						"  \n" +
 						"        (sleep-ignoring-interrupts 2)\n" +
-						//"        (agent.new-agent \"iRobotCreate.BallPusher\" \"ControllerOfAlice\" 9200 :LAC 9000 :process \"CURRENT\" :trace trace-code :traceTags trace-tags :markup \"KQML\" :controls \":9100\" :color \"purple\" :ball-color \"red\" :scale (/ width 1280.0))\n" +
-						"        (agent.new-agent \"iRobotCreate.ScoreGoal\" \"ControllerOfBob\"   9201 :LAC 9000 :process \"CURRENT\" :trace trace-code :traceTags trace-tags :markup \"KQML\" :controls \":9101\" :color \"green\"  :ball-color \"red\" :scale (/ width 1280.0))\n" +
+						"        (agent.new-agent \"iRobotCreate.DefenseTop\" \"ControllerOfAlice\" 9200 :LAC 9000 :process \"CURRENT\" :trace trace-code :traceTags trace-tags :markup \"KQML\" :controls \":9100\" :color \"purple\" :ball-color \"red\" :scale (/ width 1280.0))\n" +
+						//"        (agent.new-agent \"iRobotCreate.ScoreGoalTop\" \"ControllerOfBob\"   9201 :LAC 9000 :process \"CURRENT\" :trace trace-code :traceTags trace-tags :markup \"KQML\" :controls \":9101\" :color \"green\"  :ball-color \"red\" :scale (/ width 1280.0))\n" +
 						//"        (agent.new-agent \"iRobotCreate.BallPusher\" \"ControllerOfCarol\" 9202 :LAC 9000 :process \"CURRENT\" :trace trace-code :traceTags trace-tags :markup \"KQML\" :controls \":9102\" :color \"yellow\" :ball-color \"red\" :scale (/ width 1280.0))\n" +
 						"    ) ;let   ";
 
